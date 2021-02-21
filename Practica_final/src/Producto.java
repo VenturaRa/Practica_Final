@@ -28,7 +28,7 @@ public class Producto {
 	}
 	
 	/**
-	 * 
+	 * devuelve el nombre
 	 * @return
 	 */
 	public String getNombre() {
@@ -36,7 +36,7 @@ public class Producto {
 	}
 	
 	/**
-	 * 
+	 * devuelve el precio
 	 * @return
 	 */
 	public double getPrecio() {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class Pedido {
 	private Cliente cliente;
 	private Date fechaHora;
-	private ArrayList<Producto> producto;
+	private ArrayList<Producto> producto =new ArrayList<Producto>();
 	private double importeTotal;
 	private PasarelaDePagos pago;
 	
@@ -24,8 +24,15 @@ public class Pedido {
 		this.setPago(pago);
 	}
 	
+	public Pedido(Cliente cliente,Date fechaHora, ArrayList<Producto> producto, double importeTotal) {
+		this.setCliente(cliente);
+		this.setFechaHora(fechaHora);
+		this.setProducto(producto);
+		this.setImporteTotal(importeTotal);
+	}
+	
 	/**
-	 * 
+	 * recoge el cliente
 	 * @param cliente
 	 */
 	public void setCliente(Cliente cliente) {
@@ -33,7 +40,7 @@ public class Pedido {
 	}
 	
 	/**
-	 * 
+	 * recoge la fechahora
 	 * @param fechaHora
 	 */
 	public void setFechaHora(Date fechaHora) {
@@ -41,7 +48,7 @@ public class Pedido {
 	}
 	
 	/**
-	 * 
+	 * recoge el producto
 	 * @param producto
 	 */
 	public void setProducto(ArrayList<Producto> producto) {
@@ -49,7 +56,7 @@ public class Pedido {
 	}
 	
 	/**
-	 * 
+	 * recoge el importe total
 	 * @param importeTotal
 	 */
 	public void setImporteTotal(double importeTotal) {
@@ -57,7 +64,7 @@ public class Pedido {
 	}
 	
 	/**
-	 * 
+	 * recoge el pago
 	 * @param pago
 	 */
 	public void setPago(PasarelaDePagos pago) {
@@ -65,7 +72,7 @@ public class Pedido {
 	}
 	
 	/**
-	 * 
+	 * devuelve el cliente
 	 * @return
 	 */
 	public Cliente getCliente() {
@@ -73,7 +80,7 @@ public class Pedido {
 	}
 	
 	/**
-	 * 
+	 * devuelve la fecha hora
 	 * @return
 	 */
 	public Date getFechaHora() {
@@ -81,7 +88,7 @@ public class Pedido {
 	}
 	
 	/**
-	 * 
+	 * devuelve el producto
 	 * @return
 	 */
 	public ArrayList<Producto> getProducto(){
@@ -89,14 +96,14 @@ public class Pedido {
 	}
 	
 	/**
-	 * 
+	 * devuelve el importetotal
 	 * @return
 	 */
 	public double getImporteTotal() {
 		return importeTotal;
 	}
 	/**
-	 * 
+	 * devuelve el pago
 	 * @return
 	 */
 	public PasarelaDePagos getPago() {
@@ -104,7 +111,7 @@ public class Pedido {
 	}
 	
 	/**
-	 * 
+	 * agrega un producto
 	 * @param Producto
 	 */
 	public void agregarProducto(Producto Producto) {
@@ -114,7 +121,7 @@ public class Pedido {
 	}
 	
 	/**
-	 * 
+	 * elimina un producto
 	 * @param posicion
 	 */
 	public void eliminarProducto(int posicion) {

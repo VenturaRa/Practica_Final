@@ -13,7 +13,7 @@ public class Cliente {
 	private Date fechaDeAlta;
 	private String telefono;
 	private String direccion;
-	private ArrayList<Pedido> historial;
+	private ArrayList<Pedido> historial =new ArrayList<Pedido>();
 	/**
 	 * Es un constructor
 	 * @param Nombre
@@ -49,7 +49,7 @@ public class Cliente {
 	}
 	
 	/**
-	 * 
+	 * recoge el nombre
 	 * @param nombre
 	 */
 	public void setNombre(String nombre) {
@@ -57,7 +57,7 @@ public class Cliente {
 		}
 	
 	/**
-	 * 
+	 * recoge los apellidos
 	 * @param apellidos
 	 */
 	public void setApellidos(String apellidos) {
@@ -65,7 +65,7 @@ public class Cliente {
 		}
 	
 	/**
-	 * 
+	 * recoge la fechadealta
 	 * @param fechaDeAlta
 	 */
 	public void setFechaDeAlta(Date fechaDeAlta) {
@@ -77,14 +77,14 @@ public class Cliente {
 	}
 	
 	/**
-	 * 
+	 * fecha automatica
 	 */
 	public void setFechaDeAlta() {
 		this.fechaDeAlta= new Date();
 	}
 	
 	/**
-	 * 
+	 * recoge el telefono
 	 * @param telefono
 	 */
 	public void setTelefono(String telefono) {
@@ -99,7 +99,7 @@ public class Cliente {
 	}
 	
 	/**
-	 * 
+	 * recoge la direccion
 	 * @param direccion
 	 */
 	public void setDireccion(String direccion) {
@@ -107,44 +107,61 @@ public class Cliente {
 	}
 	
 	/**
-	 * 
+	 * recoge el historial
 	 * @param historial
 	 */
 	public void setHistorial(ArrayList<Pedido> historial) {
-		if(this.historial==null) {
-			this.historial = new ArrayList<Pedido>();
-		}
-		for (Pedido pedido :historial) {
-			agregarPedido(pedido);
-		}
+		this.historial=historial;
 	}
 	
 	/**
-	 * 
+	 * devuelve el nombre
 	 * @return
 	 */
 	public String getNombre(){
 		return nombre;	
 	}
 	
+	/**
+	 * devuelve los apellidos
+	 * @return
+	 */
 	public String getApellidos(){
 		return apellidos;	
 	}
 	
+	/**
+	 * delvuelve la fechadealta
+	 * @return
+	 */
 	public Date getFechaDeAlta(){
 		return fechaDeAlta;	
 	}
 	
+	/**
+	 * devuelve el telefono
+	 * @return
+	 */
 	public String getTelefono(){
 		return telefono;	
 	}
 	
+	/**
+	 * devuelve la direccion
+	 * @return
+	 */
 	public String getDireccion(){
 		return direccion;	
 	}
 	
+	/**
+	 * devuelve el pedido
+	 * @return
+	 */
 	public ArrayList<Pedido> getHistorial(){
-		return historial;	
+		for(Pedido p: historial) {	
+		}
+		return historial;
 	}
 	
 	/**
@@ -154,11 +171,6 @@ public class Cliente {
 	public void agregarPedido(Pedido pedido){
 		if (historial!= null)
 		historial.add(pedido);
-		
-	}
-	public static void main(String[] args) {
-		Cliente ventura=new Cliente("ventura","Rodriguez","789 273 999","kxjcvirñkjdñ");
-		System.out.println(ventura);
 		
 	}
 	
