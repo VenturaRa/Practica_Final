@@ -1,7 +1,7 @@
 
 public class Producto {
 	private String nombre;
-	private double precio;
+	private float precio;
 	
 	/**
 	 * 
@@ -23,10 +23,13 @@ public class Producto {
 	 * Solo contiene 2 decimales
 	 * @param precio
 	 */
-	public void setPrecio(double precio) {
-		this.precio=Math.round(precio * 100)/100d;
+	public void setPrecio(float precio) {
+		if	(precio>=0) {
+			this.precio=Funciones.decimales(precio, 2);
+		}else {
+			System.out.println("ERROR no puede ser negativo");
+		}
 	}
-	
 	/**
 	 * devuelve el nombre
 	 * @return
@@ -39,7 +42,11 @@ public class Producto {
 	 * devuelve el precio
 	 * @return
 	 */
-	public double getPrecio() {
+	public float getPrecio() {
 		return precio;
+	}
+	@Override
+	public String toString() {
+		return "Producto-> Nombre "+getNombre()+" Precio"+getPrecio()+"€";
 	}
 }
