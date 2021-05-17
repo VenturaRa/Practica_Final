@@ -23,7 +23,7 @@ public class Cliente {
 	 * @param Direccion
 	 * @param Historial
 	 */
-	public Cliente(String nombre,String apellidos,Date fechaDeAlta,String telefono,String direccion){
+	public Cliente(String nombre,String apellidos,Date fechaDeAlta,String telefono,String direccion)throws TelefonoException{
 		this.setNombre(nombre);
 		this.setApellidos(apellidos);
 		this.setFechaDeAlta(fechaDeAlta);
@@ -39,7 +39,7 @@ public class Cliente {
 	 * @param telefono
 	 * @param direccion
 	 */
-	public Cliente(String nombre,String apellidos,String telefono,String direccion){
+	public Cliente(String nombre,String apellidos,String telefono,String direccion) throws TelefonoException{
 		this.setNombre(nombre);
 		this.setApellidos(apellidos);
 		this.setFechaDeAlta(fechaDeAlta);
@@ -87,13 +87,19 @@ public class Cliente {
 	 * recoge el telefono
 	 * @param telefono
 	 */
-	public void setTelefono(String telefono) {
+	public void setTelefono(String telefono) throws TelefonoException {
 		telefono=telefono.replace(" ","");
-		if (telefono.length()==9 && (telefono.charAt(0)=='6' || telefono.charAt(0)=='7' || telefono.charAt(0)=='8' || telefono.charAt(0)=='9')) {
+		if (telefono.length()==9 && (telefono.charAt(0)=='6' || telefono.charAt(0)=='7' || telefono.charAt(0)=='8' || telefono.charAt(0)=='9') && Funciones.isNumber(telefono)) {
 			this.telefono=telefono;
 		}else {
-			this.telefono="000000000";
-			System.out.println("Error: el telefono debe ser mayor de 9 cifras");
+			try {
+				throw new TelefonoException("Error: el telefono debe ser mayor de 9 cifras");
+			}catch (TelefonoException e) {
+				this.telefono="000000000";
+				e.printStackTrace();
+		
+			}
+			
 		}
 		
 	}
@@ -176,7 +182,7 @@ public class Cliente {
 	
 	@Override
 	public String toString() {
-		return "Nombre "+getNombre()+" "+getApellidos()+" "+getTelefono()+" "+getFechaDeAlta();
+		return "Nombre--> "+getNombre()+"\nApellidos--> "+getApellidos()+"\nTelefono--> "+getTelefono()+"\nFechaDeAlta-->"+getFechaDeAlta();
 	}
 	
 }

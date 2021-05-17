@@ -7,5 +7,14 @@ public class Funciones {
 		}
 		return (int)(valor*decim)/decim;
 	}
+	public static boolean isNumber(String number) {
+		boolean numero=true;
+		for(int i=0; i<number.length() && numero!=false; i++) {
+			if(number.charAt(i)<'0' || number.charAt(i)>'9') {
+				numero=false;
+			}
+		}
+		return numero;
+	}
 
 }

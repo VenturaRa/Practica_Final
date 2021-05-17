@@ -8,7 +8,7 @@ public class Producto {
 	 * @param nombre
 	 * @param precio
 	 */
-	public Producto (String nombre,float precio) {
+	public Producto (String nombre,float precio) throws PagoException {
 		this.setNombre(nombre);
 		this.setPrecio(precio);
 	}
@@ -23,11 +23,16 @@ public class Producto {
 	 * Solo contiene 2 decimales
 	 * @param precio
 	 */
-	public void setPrecio(float precio) {
+	public void setPrecio(float precio) throws PagoException {
 		if	(precio>=0) {
 			this.precio=Funciones.decimales(precio, 2);
 		}else {
-			System.out.println("ERROR no puede ser negativo");
+			try {
+				throw new PagoException("ERROR: no puede ser negativo");
+			}catch (PagoException e) {
+				e.printStackTrace();
+			}
+			
 		}
 	}
 	/**
@@ -47,6 +52,6 @@ public class Producto {
 	}
 	@Override
 	public String toString() {
-		return "Producto-> Nombre "+getNombre()+" Precio"+getPrecio()+"€";
+		return "Producto-> "+getNombre()+" Precio "+getPrecio()+"€";
 	}
 }

@@ -1,4 +1,3 @@
-import java.util.Date;
 
 public class PasarelaDePagos {
 	private float importe;
@@ -21,16 +20,13 @@ public class PasarelaDePagos {
 		if (importe >= 0) {
 			this.importe = Funciones.decimales(importe, 2);
 		} else {
-			System.out.println("ERROR: Importe negativo");
+			try {
+				throw new  PagoException("ERROR: Importe negativo");
+			}catch(PagoException e) {
+				e.printStackTrace();
+			}
 		}
 
-	}
-
-	/**
-	 * 
-	 */
-	private void setCodigoPago() {
-		this.codigoPago = new Date().getTime();
 	}
 
 	/**
@@ -104,6 +100,6 @@ public class PasarelaDePagos {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "Pasarela-> Importe"+getImporte()+"€ CodigoPago"+getCodigoPago();
+		return "Pasarela--> Importe"+getImporte()+"€"+"\nCodigoPago-->"+getCodigoPago();
 	}
 }

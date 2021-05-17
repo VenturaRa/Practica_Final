@@ -17,24 +17,25 @@ public class Pedido {
 	 * @param producto
 	 * @param importeTotal
 	 * @param pago
+	 * @throws PagoException 
 	 */
-	public Pedido(Cliente cliente,Date fechaHora, ArrayList<Producto> producto) {
+	public Pedido(Cliente cliente,Date fechaHora, ArrayList<Producto> producto) throws PedidoException,PagoException {
 		this.setCliente(cliente);
 		this.setFechaHora(fechaHora);
 		this.setProducto(producto);
 	}
 	
-	public Pedido(Cliente cliente, ArrayList<Producto> producto) {
+	public Pedido(Cliente cliente, ArrayList<Producto> producto) throws PedidoException,PagoException {
 		this.setCliente(cliente);
 		this.setFechaHora(new Date());
 		this.setProducto(producto);
 	}
-	public Pedido(Cliente cliente) {
+	public Pedido(Cliente cliente) throws PedidoException,PagoException {
 		this.setCliente(cliente);
 		this.setFechaHora(new Date());
 		this.setProducto(new ArrayList<Producto>());
 	}
-	public Pedido(Cliente cliente, Date fechahora) {
+	public Pedido(Cliente cliente, Date fechahora) throws PedidoException, PagoException{
 		this.setCliente(cliente);
 		this.setFechaHora(fechaHora);
 		this.setProducto(new ArrayList<Producto>());
@@ -59,13 +60,18 @@ public class Pedido {
 	/**
 	 * recoge el producto
 	 * @param producto
+	 * @throws PagoException 
 	 */
-	public void setProducto(ArrayList<Producto> productos) {
+	public void setProducto(ArrayList<Producto> productos) throws PagoException {
 		if (this.producto==null) {
 			this.producto=new ArrayList<Producto>();
 		}
 		for(Producto producto:productos) {
-			agregarProducto(producto);
+			try {
+				agregarProducto(producto);
+			} catch (PedidoException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -73,11 +79,16 @@ public class Pedido {
 	 * recoge el importe total
 	 * @param importeTotal
 	 */
-	public void setImporteTotal(float importeTotal) {
+	public void setImporteTotal(float importeTotal) throws PagoException{
 		if (importeTotal >= 0) {
 			this.importeTotal = Funciones.decimales(importeTotal, 2);
 		} else {
-			System.out.println("ERROR: Importe negativo");
+			try {
+				throw new PagoException("ERROR: Importe negativo");
+			}catch (PagoException e) {
+				e.printStackTrace();
+			}
+			
 		}
 	}
 	
@@ -90,11 +101,19 @@ public class Pedido {
 	}
 	
 	public void setEstado() {
-		if (this.estado==null && pago.getCodigoPago()!=0 && pago!=null) {
+		if (this.estado==null && pago!=null && pago.getCodigoPago()!=0 ) {
 			this.estado="PAGADO";
 		}else {
 			if(this.estado.equals("PAGADO")) {
 				this.estado="PREPARANDO";
+			}else {
+				if(this.estado.equals("PREPARANDO")){
+					this.estado="LISTO";
+				}else {
+					if(this.estado.equals("LISTO")) {
+						this.estado="SERVIDO";
+					}
+				}
 			}
 		}
 	}
@@ -143,7 +162,7 @@ public class Pedido {
 	public String estado() {
 		return estado;
 	}
-	public boolean pagar(String tipo, float cantidad) {
+	public boolean pagar(String tipo, float cantidad) throws PagoException {
 		if (pago!=null && pago.getCodigoPago()==0) {
 			pago=new PasarelaDePagos(importeTotal);
 			switch(tipo) {
@@ -151,7 +170,12 @@ public class Pedido {
 			default: System.out.println("ERROR: metodo de pago no valido");
 			}	
 		}else {
-			System.out.println("ERROR: ya se ha pagado");
+			try {
+				throw new PagoException("ERROR: ya se ha pagado");
+			}catch(PagoException e) {
+				e.printStackTrace();
+			}
+			
 		}
 		return false;
 	}
@@ -159,13 +183,18 @@ public class Pedido {
 	/**
 	 * agrega un producto
 	 * @param Producto
+	 * @throws PagoException 
 	 */
-	public void agregarProducto(Producto Producto) {
-		if (getEstado().equalsIgnoreCase("PAGADO")) {
+	public void agregarProducto(Producto Producto) throws PedidoException, PagoException {
+		if (getEstado()==null) {
 			producto.add(Producto);
 			setImporteTotal(getImporteTotal()+Producto.getPrecio());
 		}else {
-			System.out.println("ERROR: pedido modificado");
+			try {
+				throw new PedidoException("ERROR: pedido modificado");
+			}catch(PedidoException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -183,7 +212,7 @@ public class Pedido {
 	}
 	@Override
 	public String toString() {
-		return "Productos"+producto+"Importe:"+getImporteTotal()+"Pago"+getPago()+"ESTADO"+getEstado();
+		return "Productos--> "+producto+" \nImporte--> "+getImporteTotal()+" \nPago--> "+getPago()+" \nESTADO--> "+getEstado();
 	}
 	
 }
