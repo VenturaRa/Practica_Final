@@ -1,3 +1,4 @@
+import java.util.Date;
 
 public class PasarelaDePagos {
 	private float importe;
@@ -13,7 +14,7 @@ public class PasarelaDePagos {
 
 	/**
 	 *
-	 * 
+	 * le pasamos el importe
 	 * @param importe
 	 */
 	public void setImporte(float importe) {
@@ -27,6 +28,9 @@ public class PasarelaDePagos {
 			}
 		}
 
+	}
+	private void setCodigoPago() {
+		this.codigoPago= new Date().getTime();
 	}
 
 	/**
@@ -46,60 +50,53 @@ public class PasarelaDePagos {
 	public long getCodigoPago() {
 		return codigoPago;
 	}
+	/**
+	 * le pasamos la cantidad y nos dice la cantidad de billetes que tenemos que devolver
+	 * @param cantidad
+	 */
+	public void Efectivo(float cantidad) {
+		
+		float devolver = 0;
+		int b50 = 0, b20 = 0, b10 = 0, b5 = 0;
+		System.out.println("********************************************\n");
 
-	public boolean Efectivo(float cantidad) {
-		
-		float devolucion = 0;
-		float centimos = 0;
-		int contador_billetes = 0;
-		if (cantidad<importe) {
-			System.out.println("ERROR: la catidad no es valida");
-			return false;
+		System.out.println("Tienes que pagar:" + importe + " €");
+		if(codigoPago==0) {
+			if (cantidad < 0) {
+				System.out.println("Error: no puede ser negativo");
+			} else {
+				if (cantidad < importe) {
+					System.out.println("Error; la cantidad no puede ser menor");
+				} else {
+					devolver = (cantidad - importe);
+					System.out.println("Tengo que devolver: "+devolver+" €");
+					b50 = (int) (devolver / 50);
+					System.out.println("Billetes de 50€: " + b50);
+					devolver = devolver % 50;
+					b20 = (int) (devolver / 20);
+					System.out.println("Billetes de 20€: " + b20);
+					devolver = devolver % 20;
+					b10 = (int) (devolver / 10);
+					System.out.println("Billetes de 10€: " + b10);
+					devolver = devolver % 10;
+					b5 = (int) (devolver / 5);
+					System.out.println("Billetes de 5: " + b5);
+					devolver = devolver % 5;
+					System.out.println("Monedas de 1€: " + (int) devolver);
+					float centimos = (devolver - (int) devolver);
+					centimos = ((int)(centimos * 100)) / 100.0f;
+					System.out.println("Monedas de centimos:" + centimos + " €");
+					setCodigoPago();
+					System.out.println("Su codigo de Pago es "+codigoPago);
+				}
+			}
+	
+		}else {
+			System.out.println("El Pedido de"+importe+ "€ ya esta pagado");
 		}
-		
-		System.out.println("\n\nSu Cambio\n*****************************************************");
-
-		for (contador_billetes = 0; cantidad - 50.00 >= this.importe; contador_billetes++, cantidad -= 50.00) {
-			devolucion += 50.00;
-		}
-		System.out.println("50€\t" + contador_billetes + "Billete(s)");
-		
-		
-		for (contador_billetes = 0; cantidad - 20.00 >= this.importe; contador_billetes++, cantidad -= 20.00) {
-			devolucion += 20.00;
-		}
-		
-		System.out.println("200€\t" + contador_billetes + "Billete(s)");
-		
-		for (contador_billetes = 0; cantidad - 10.00 >= this.importe; contador_billetes++, cantidad -= 10.00) {
-			devolucion += 10.00;
-		}
-		
-		System.out.println("10€\t" + contador_billetes + "Billete(s)");
-		
-		for (contador_billetes = 0; cantidad - 5.00 >= this.importe; contador_billetes++, cantidad -= 5.00) {
-			devolucion += 5.00;
-		}
-		System.out.println("5€\t" + contador_billetes + "Billete(s)");
-		
-		for(contador_billetes =0;cantidad - 1.00 >= this.importe; cantidad -= 1.00) {
-			devolucion +=1.00;
-		}
-		
-		
-		
-		centimos = (int) ((cantidad*100) - (this.importe *100)) /100.0f;
-		devolucion += centimos;
-		centimos=Funciones.decimales(centimos, 2);
-		System.out.println("cent\t" + centimos +"centimos");
-		
-		System.out.println("Total devolucion:"+  devolucion+ "€");
-		return false;
-
 	}
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return "Pasarela--> Importe"+getImporte()+"€"+"\nCodigoPago-->"+getCodigoPago();
+		return "Pasarela--> Importe"+getImporte()+"€"+"\nCodigoPago-->"+codigoPago;
 	}
 }

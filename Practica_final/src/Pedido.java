@@ -23,22 +23,26 @@ public class Pedido {
 		this.setCliente(cliente);
 		this.setFechaHora(fechaHora);
 		this.setProducto(producto);
+		this.setPago(new PasarelaDePagos(importeTotal));
 	}
 	
 	public Pedido(Cliente cliente, ArrayList<Producto> producto) throws PedidoException,PagoException {
 		this.setCliente(cliente);
 		this.setFechaHora(new Date());
 		this.setProducto(producto);
+		this.setPago(new PasarelaDePagos(importeTotal));
 	}
 	public Pedido(Cliente cliente) throws PedidoException,PagoException {
 		this.setCliente(cliente);
 		this.setFechaHora(new Date());
 		this.setProducto(new ArrayList<Producto>());
+		this.setPago(new PasarelaDePagos(importeTotal));
 	}
 	public Pedido(Cliente cliente, Date fechahora) throws PedidoException, PagoException{
 		this.setCliente(cliente);
 		this.setFechaHora(fechaHora);
 		this.setProducto(new ArrayList<Producto>());
+		this.setPago(new PasarelaDePagos(importeTotal));
 	}
 	
 	/**
@@ -48,6 +52,7 @@ public class Pedido {
 	public void setCliente(Cliente cliente) {
 		this.cliente=cliente;
 	}
+	
 	
 	/**
 	 * recoge la fechahora
@@ -79,7 +84,7 @@ public class Pedido {
 	 * recoge el importe total
 	 * @param importeTotal
 	 */
-	public void setImporteTotal(float importeTotal) throws PagoException{
+	public void setImporteTotal() throws PagoException{
 		if (importeTotal >= 0) {
 			this.importeTotal = Funciones.decimales(importeTotal, 2);
 		} else {
@@ -90,6 +95,12 @@ public class Pedido {
 			}
 			
 		}
+	}
+	/*
+	 * lo que haces es asignar el importetotal
+	 */
+	public void setImporteTotal(float importeTotal) {
+		this.importeTotal=Funciones.decimales(importeTotal, 2);
 	}
 	
 	/**
@@ -103,20 +114,15 @@ public class Pedido {
 	public void setEstado() {
 		if (this.estado==null && pago!=null && pago.getCodigoPago()!=0 ) {
 			this.estado="PAGADO";
-		}else {
-			if(this.estado.equals("PAGADO")) {
-				this.estado="PREPARANDO";
-			}else {
-				if(this.estado.equals("PREPARANDO")){
-					this.estado="LISTO";
-				}else {
-					if(this.estado.equals("LISTO")) {
-						this.estado="SERVIDO";
-					}
-				}
-			}
+		}else if(this.estado.equalsIgnoreCase("PAGADO")) {
+			this.estado="PREPARANDO";
+		}else if(this.estado.equalsIgnoreCase("PREPARANDO")){
+			this.estado="LISTO";
+		}else if(this.estado.equalsIgnoreCase("LISTO")) {
+			this.estado="SERVIDO";
 		}
 	}
+	
 	
 	/**
 	 * devuelve el cliente
@@ -162,21 +168,26 @@ public class Pedido {
 	public String estado() {
 		return estado;
 	}
+	/*
+	 * 
+	 */
 	public boolean pagar(String tipo, float cantidad) throws PagoException {
-		if (pago!=null && pago.getCodigoPago()==0) {
-			pago=new PasarelaDePagos(importeTotal);
-			switch(tipo) {
-			case "EFECTIVO":pago.Efectivo(cantidad);
-			default: System.out.println("ERROR: metodo de pago no valido");
+			getPago().setImporte(importeTotal);
+			switch(tipo.toUpperCase()) {
+			case "EFECTIVO":
+				if(this.getEstado()==null) {
+					pago.Efectivo(cantidad);
+					setEstado();
+				}else {
+					try {
+						throw new PagoException("ERROR: ya se ha pagado");
+					}catch(PagoException e) {
+						e.printStackTrace();
+					}
+				}
+			break;
+			default: System.out.println("ERROR: metodo de pago no valido");break;
 			}	
-		}else {
-			try {
-				throw new PagoException("ERROR: ya se ha pagado");
-			}catch(PagoException e) {
-				e.printStackTrace();
-			}
-			
-		}
 		return false;
 	}
 	

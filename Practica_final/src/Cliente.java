@@ -14,6 +14,7 @@ public class Cliente {
 	private String telefono;
 	private String direccion;
 	private ArrayList<Pedido> historial =new ArrayList<Pedido>();
+	private int contador_gratis;
 	/**
 	 * Es un constructor
 	 * @param Nombre
@@ -23,13 +24,14 @@ public class Cliente {
 	 * @param Direccion
 	 * @param Historial
 	 */
-	public Cliente(String nombre,String apellidos,Date fechaDeAlta,String telefono,String direccion)throws TelefonoException{
+	public Cliente(String nombre,String apellidos,Date fechaDeAlta,String telefono,String direccion, int contador_gratis)throws TelefonoException{
 		this.setNombre(nombre);
 		this.setApellidos(apellidos);
 		this.setFechaDeAlta(fechaDeAlta);
 		this.setTelefono(telefono);
 		this.setDireccion(direccion);
 		this.setHistorial(new ArrayList<Pedido>());
+		this.setContador_gratis(0);
 	}
 	
 	/**
@@ -42,10 +44,11 @@ public class Cliente {
 	public Cliente(String nombre,String apellidos,String telefono,String direccion) throws TelefonoException{
 		this.setNombre(nombre);
 		this.setApellidos(apellidos);
-		this.setFechaDeAlta(fechaDeAlta);
+		this.setFechaDeAlta(new Date());
 		this.setTelefono(telefono);
 		this.setDireccion(direccion);
 		this.setHistorial(new ArrayList<Pedido>());
+		this.setContador_gratis(0);
 	}
 	
 	/**
@@ -96,7 +99,7 @@ public class Cliente {
 				throw new TelefonoException("Error: el telefono debe ser mayor de 9 cifras");
 			}catch (TelefonoException e) {
 				this.telefono="000000000";
-				e.printStackTrace();
+				throw e;
 		
 			}
 			
@@ -116,8 +119,20 @@ public class Cliente {
 	 * recoge el historial
 	 * @param historial
 	 */
-	public void setHistorial(ArrayList<Pedido> historial) {
-		this.historial=historial;
+	public void setHistorial(ArrayList<Pedido> historial) { 
+		if(this.historial==null) {
+			this.historial=new ArrayList<Pedido>();
+		}
+		for(int i=0;i<historial.size();i++) {
+			Pedido pedido=historial.get(i);
+			agregarPedido(pedido);
+			
+		}
+		
+	}
+	
+	public void setContador_gratis(int contador_gratis) {
+		this.contador_gratis=contador_gratis;
 	}
 	
 	/**
@@ -165,24 +180,45 @@ public class Cliente {
 	 * @return
 	 */
 	public ArrayList<Pedido> getHistorial(){
-		for(Pedido p: historial) {	
-		}
 		return historial;
+	}
+	public int getContador_gratis() {
+		return contador_gratis;
+	}
+	/*
+	 * le ponemos el instanceof por que el pedido tiene que ser pedidodomicilio
+	 */
+	private void ContadorGratis() {
+		this.contador_gratis=0;
+		for(int i=0; i<historial.size();i++) {
+			Pedido pedido=historial.get(i);
+			if(pedido instanceof PedidoDomicilio && pedido.getImporteTotal()==0) {
+				this.contador_gratis++;
+			}
+		}
 	}
 	
 	/**
 	 * metedo agregar pedido que el pedido lo guarda en el historial
+	 * un pedidodomicilio no puede ser gratis mas de 3 veces
 	 * @param pedido
 	 */
 	public void agregarPedido(Pedido pedido){
-		if (historial!= null)
-		historial.add(pedido);
+		if(contador_gratis>=3 && pedido instanceof PedidoDomicilio) {
+			System.out.println("ERROR: No puedes tener otro pedido gratis");
+		}else {
+			if(pedido.getEstado()!=null && !pedido.getEstado().equalsIgnoreCase("PREPARADO") && pedido.getCliente()==this ) {
+						this.historial.add(pedido);
+				}else {
+					System.out.println("ERROR: Pedido no valido");
+				}
+		}
 		
 	}
 	
 	@Override
 	public String toString() {
-		return "Nombre--> "+getNombre()+"\nApellidos--> "+getApellidos()+"\nTelefono--> "+getTelefono()+"\nFechaDeAlta-->"+getFechaDeAlta();
+		return "Nombre--> "+getNombre()+"\nApellidos--> "+getApellidos()+"\nTelefono--> "+getTelefono()+"\nFechaDeAlta-->"+getFechaDeAlta()+"\nHistorial"+getHistorial();
 	}
 	
 }
