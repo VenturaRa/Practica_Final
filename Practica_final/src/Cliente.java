@@ -1,4 +1,5 @@
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 /**
@@ -7,7 +8,7 @@ import java.util.Date;
  *
  */
 
-public class Cliente {
+public class Cliente implements Serializable{
 	private String nombre;
 	private String apellidos;
 	private Date fechaDeAlta;
@@ -92,7 +93,8 @@ public class Cliente {
 	 */
 	public void setTelefono(String telefono) throws TelefonoException {
 		telefono=telefono.replace(" ","");
-		if (telefono.length()==9 && (telefono.charAt(0)=='6' || telefono.charAt(0)=='7' || telefono.charAt(0)=='8' || telefono.charAt(0)=='9') && Funciones.isNumber(telefono)) {
+		if (telefono.length()==9 && (telefono.charAt(0)=='6' || telefono.charAt(0)=='7' || telefono.charAt(0)=='8' || telefono.charAt(0)=='9') && 
+				Funciones.isNumber(telefono)) {
 			this.telefono=telefono;
 		}else {
 			try {
@@ -207,7 +209,7 @@ public class Cliente {
 		if(contador_gratis>=3 && pedido instanceof PedidoDomicilio) {
 			System.out.println("ERROR: No puedes tener otro pedido gratis");
 		}else {
-			if(pedido.getEstado()!=null && !pedido.getEstado().equalsIgnoreCase("PREPARADO") && pedido.getCliente()==this ) {
+			if(pedido.getEstado()!=null && !pedido.getEstado().equalsIgnoreCase("PREPARADO") && pedido.getCliente()==this && pedido.getFechaHora()==this.fechaDeAlta ) {
 						this.historial.add(pedido);
 				}else {
 					System.out.println("ERROR: Pedido no valido");

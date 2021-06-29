@@ -1,8 +1,9 @@
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Pedido {
+public class Pedido implements Serializable{
 	private Cliente cliente;
 	private Date fechaHora;
 	private ArrayList<Producto> producto =new ArrayList<Producto>();

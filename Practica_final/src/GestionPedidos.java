@@ -6,9 +6,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GestionPedidos {
+public class GestionPedidos implements Serializable{
+	
+	private ArrayList<Cliente>clientes;
+	private ArrayList<Producto>productos;
+	
+	
+	public GestionPedidos() {
+		this.clientes = new ArrayList<Cliente>();
+		this.productos = new ArrayList<Producto>();
+	}
 	/**
 	 * Guarda los clientes y los productos
 	 * object
@@ -64,15 +74,13 @@ public class GestionPedidos {
 				if(array instanceof Cliente) {
 					System.out.println(array);
 					array=ois.readObject();
-				}else {
-					if(array instanceof Producto) {
+				}
+				}if(array instanceof Producto) {
 						System.out.println(array);
 						array=ois.readObject();
 					}else {
 						throw new ClassNotFoundException("ERROR:");
 					}
-				}
-			}
 		}catch (EOFException e) {
 			System.out.println("Fin de Fichero");
 		}catch (IOException e) {
@@ -89,7 +97,14 @@ public class GestionPedidos {
 			}
 		}
 	}
-	public static void main(String[] args) {
+	public static void main(String[] args) throws TelefonoException, PagoException, IOException, ClassNotFoundException {
+		GestionPedidos gp=new GestionPedidos();
+		//gp.clientes.add(new Cliente("Ventura","Rodriguez","678863804","Arenas"));
+		//gp.productos.add(new Producto("Queso",50f));
+		//gp.guardarTexto(gp.clientes, gp.productos);
+		gp.recuperarTexto();
+		System.out.println(gp);
+		
 		
 	}
 

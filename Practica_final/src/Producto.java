@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public class Producto {
+public class Producto implements Serializable{
 	private String nombre;
 	private float precio;
 	
